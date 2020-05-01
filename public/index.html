@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>WebTerm</title>
+    <script src="/term.js"></script>
+    <script>
+      window.addEventListener('load', function() {
+        var Socket = window.MozWebSocket || window.WebSocket;
+        socket = new Socket('ws://' + location.hostname + ':' + location.port);
+        socket.onopen = function() {
+          var term = new Terminal({
+            cols: 250,
+            rows: 100,
+            convertEol: true,
+            useStyle: true,
+            cursorBlink: true,
+            screenKeys: true
+          });
+
+          term.on('data', function(data) {
+            socket.send(data);
+          });
+
+          term.on('title', function(title) {
+            document.title = title;
+          });
+
+          term.open(document.body);
+
+          socket.onmessage = function(event) {
+            term.write(event.data);
+          };
+
+          socket.onclose = function() {
+            term.destroy();
+          };
+        };
+      }, false);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
