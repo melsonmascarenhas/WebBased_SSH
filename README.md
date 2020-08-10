@@ -1,5 +1,5 @@
 # WebBased_SSH
-This is WebBased SSH client ,This was my part of company project.
+This is WebBased SSH client.
 Run this project 
 
 ```node server.js``` 
